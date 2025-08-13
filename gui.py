@@ -455,7 +455,7 @@ class RLGymGUI:
                 self.master.after(0, lambda: messagebox.showinfo("Training Status", "Training session finished."))
             except Exception as e:
                 logger.exception("Training session failed.")
-                self.master.after(0, lambda: messagebox.showerror("Training Status", f"Training session failed: {e}"))
+                self.master.after(0, lambda e=e: messagebox.showerror("Training Status", f"Training session failed: {e}"))
             finally:
                 logger.logger.removeHandler(training_queue_handler)
                 training_queue_listener.stop()
@@ -610,7 +610,7 @@ class RLGymGUI:
             
         except Exception as e:
             logger.exception("Simulation failed.")
-            self.master.after(0, lambda: messagebox.showerror("Simulation", f"Simulation failed: {e}"))
+            self.master.after(0, lambda e=e: messagebox.showerror("Simulation", f"Simulation failed: {e}"))
         finally:
             self.master.after(0, self._reset_simulation_ui)
             self.master.after(0, self._close_progress_dialog)
@@ -1071,7 +1071,7 @@ class RLGymGUI:
             self.master.after(0, lambda: messagebox.showinfo("Optimization", "Hyperparameter optimization finished!"))
         except Exception as e:
             logger.exception("Optimization failed.")
-            self.master.after(0, lambda: messagebox.showerror("Optimization", f"Optimization failed: {e}"))
+            self.master.after(0, lambda e=e: messagebox.showerror("Optimization", f"Optimization failed: {e}"))
         finally:
             self.master.after(0, self._reset_optimization_ui)
 
@@ -1156,7 +1156,7 @@ class RLGymGUI:
                 if process.returncode != 0:
                     self.master.after(0, lambda: messagebox.showerror("Git Error", f"Git command failed with error:\n{stderr}"))
             except Exception as e:
-                self.master.after(0, lambda: messagebox.showerror("Error", f"Failed to execute Git command: {e}"))
+                self.master.after(0, lambda e=e: messagebox.showerror("Error", f"Failed to execute Git command: {e}"))
                 logger.exception("Failed to execute Git command.")
 
         threading.Thread(target=run_command).start()
