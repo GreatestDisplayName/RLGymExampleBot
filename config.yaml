@@ -1,0 +1,39 @@
+training:
+  n_envs: 4
+  total_timesteps: 1000000
+  batch_size: 2048
+  n_epochs: 10
+  learning_rate: 0.0003
+  save_freq: 100000
+  eval_freq: 50000
+
+model:
+  hidden_size: 512
+  policy_layers: [512, 512, 256]
+  value_layers: [512, 512, 256]
+  activation: "relu"
+  dropout: 0.1
+
+environment:
+  timeout: 300
+  team_size: 1
+  spawn_opponents: true
+  obs_builder: "AdvancedObs"
+  action_parser: "DiscreteAction"
+  reward_function: "CombinedReward"
+
+paths:
+  log_dir: "logs"
+  model_dir: "models"
+  tensorboard_dir: "tensorboard_logs"
+  config_dir: "configs"
+
+evaluation:
+  n_eval_episodes: 10
+  eval_deterministic: true
+  render_eval: false
+
+logging:
+  log_level: "INFO"
+  save_replay_buffer: true
+  save_vecnormalize: true
