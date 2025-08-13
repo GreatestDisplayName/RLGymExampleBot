@@ -1,0 +1,45 @@
+RLGym GUI Future Improvement Plan
+
+## Phase 4: Future Ideas
+[X] Model Comparison Tools: Allow users to compare performance metrics of different models side-by-side.
+[X] Hyperparameter Optimization Integration: A dedicated GUI for setting up and running hyperparameter optimization experiments.
+[X] Agent vs. Agent Simulation: Interface for running and visualizing simulations between two selected agents.
+[X] Configuration Validation: More robust validation for configuration files beyond JSON format.
+
+## Phase 5: Even More Ideas
+[ ] Cloud Integration: Save/load models and configurations from cloud storage (Google Drive, AWS S3).
+[X] Version Control Integration: Git integration for tracking changes to configurations and models.
+[ ] Multi-Agent Training Support: Configure and monitor multi-agent training scenarios.
+[ ] Custom Environment Creation Wizard: Guided process to define and integrate custom RLGym environments.
+[ ] Performance Profiling Tools: Analyze performance of trained agents.
+
+## Phase 6: AI-Assisted Tools
+[ ] AI-Powered Training Recommendations: Suggest optimal hyperparameters based on past training results.
+[ ] Automated Curriculum Learning: Dynamically adjust training difficulty for faster convergence.
+[ ] Natural Language Commands: Control training sessions via plain English commands.
+[ ] Auto-Debugger: Detect and suggest fixes for common environment or training errors.
+
+## Phase 7: Collaboration & Sharing
+[ ] Live Collaboration Mode: Multiple users can work on the same training setup in real-time.
+[ ] Public Model Repository: Share and browse pre-trained models with the community.
+[ ] Experiment Sharing: Export/import full experiment setups (configs, models, datasets).
+[ ] Comment & Annotation System: Add notes to configurations, experiments, and results.
+
+## Phase 8: Immersive Visualization
+[ ] 3D Training Visualization: Real-time 3D render of matches alongside metrics.
+[ ] VR Mode: Monitor and interact with training in virtual reality.
+[ ] Interactive Metric Dashboards: Clickable, filterable, and zoomable training metrics.
+[ ] Replay Heatmaps: Show spatial activity patterns and decision zones.
+
+## Additional Suggestions
+[ ] Export Training Reports: Generate PDF/HTML reports summarizing training metrics, model details, and results.
+[ ] Notification System: Email or desktop alerts when training completes or errors occur.
+[ ] Dataset Management: Tools for creating, labeling, and using datasets for supervised pre-training.
+[ ] Plugin API: Allow community to create and share custom tabs or tools.
+[ ] Replay Analysis: Visualize Rocket League replays with overlays showing agent decisions and stats.
+
+## Next Steps
+
+All previously planned phases for improving the RLGym GUI have been completed, and five significant "Future Ideas" have been successfully implemented.
+
+Please review this updated roadmap and let me know which of the remaining ideas you would like to prioritize for the next development cycle. Your feedback is crucial in shaping the future of the RLGym GUI.
