@@ -1606,3 +1606,218 @@ if __name__ == "__main__":
     root = ThemedTk(theme="arc")
     app = RLGymGUI(root)
     root.mainloop()
+import sys
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QTabWidget, QVBoxLayout, QHBoxLayout, 
+                            QLabel, QPushButton, QComboBox, QSpinBox, QDoubleSpinBox, QCheckBox,
+                            QFileDialog, QProgressBar, QGroupBox, QFormLayout)
+from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import numpy as np
+
+from src.config import config
+from src.agent import Agent
+
+class TrainingChart(QChartView):
+    """Interactive chart for displaying training metrics"""
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.chart = QChart()
+        self.setChart(self.chart)
+        self.chart.setTitle("Training Progress")
+        self.series = {}
+        
+        # Setup axes
+        self.x_axis = QValueAxis()
+        self.x_axis.setTitleText("Timesteps")
+        self.y_axis = QValueAxis()
+        self.y_axis.setTitleText("Value")
+        self.chart.addAxis(self.x_axis, Qt.AlignBottom)
+        self.chart.addAxis(self.y_axis, Qt.AlignLeft)
+
+    def add_series(self, name, color):
+        """Add a new data series to the chart"""
+        series = QLineSeries()
+        series.setName(name)
+        series.setColor(color)
+        self.chart.addSeries(series)
+        series.attachAxis(self.x_axis)
+        series.attachAxis(self.y_axis)
+        self.series[name] = series
+        return series
+
+class RLGymGUI(QMainWindow):
+    """Main application window for RLGym GUI"""
+    def __init__(self):
+        super().__init__()
+        self.agent = None
+        self.init_ui()
+        self.load_config_values()
+        
+        # Setup data update timer
+        self.update_timer = QTimer(self)
+        self.update_timer.timeout.connect(self.update_realtime_data)
+        self.update_timer.start(1000)  # Update every second
+
+    def init_ui(self):
+        """Initialize the user interface"""
+        self.setWindowTitle("RLGym Training Suite")
+        self.setGeometry(100, 100, 1200, 800)
+        
+        # Create main tabs
+        self.tabs = QTabWidget()
+        self.setCentralWidget(self.tabs)
+        
+        # Create interface sections
+        self.tabs.addTab(self.create_dashboard_tab(), "Dashboard")
+        self.tabs.addTab(self.create_training_tab(), "Training")
+        self.tabs.addTab(self.create_config_tab(), "Configuration")
+        self.tabs.addTab(self.create_visualization_tab(), "Visualization")
+
+    def create_dashboard_tab(self):
+        """Create the main dashboard tab"""
+        tab = QWidget()
+        layout = QVBoxLayout()
+        
+        # Real-time metrics
+        metrics_group = QGroupBox("Real-time Metrics")
+        metrics_layout = QFormLayout()
+        self.metric_labels = {
+            'reward': QLabel("0.0"),
+            'episode_length': QLabel("0"),
+            'epsilon': QLabel("0.0"),
+            'learning_rate': QLabel("0.0")
+        }
+        for name, label in self.metric_labels.items():
+            metrics_layout.addRow(name.capitalize() + ":", label)
+        metrics_group.setLayout(metrics_layout)
+        
+        # Add components to layout
+        layout.addWidget(metrics_group)
+        layout.addWidget(self.create_model_control_group())
+        
+        tab.setLayout(layout)
+        return tab
+
+    def create_training_tab(self):
+        """Create the training control tab"""
+        tab = QWidget()
+        layout = QVBoxLayout()
+        
+        # Training chart
+        self.training_chart = TrainingChart()
+        self.training_chart.add_series("Episode Reward", Qt.blue)
+        self.training_chart.add_series("Average Reward", Qt.red)
+        layout.addWidget(self.training_chart)
+        
+        # Progress controls
+        progress_group = QGroupBox("Training Progress")
+        progress_layout = QHBoxLayout()
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 100)
+        self.btn_start = QPushButton("Start Training")
+        self.btn_stop = QPushButton("Stop")
+        progress_layout.addWidget(self.progress_bar)
+        progress_layout.addWidget(self.btn_start)
+        progress_layout.addWidget(self.btn_stop)
+        progress_group.setLayout(progress_layout)
+        
+        layout.addWidget(progress_group)
+        tab.setLayout(layout)
+        return tab
+
+    def create_config_tab(self):
+        """Create the configuration tab"""
+        tab = QWidget()
+        layout = QVBoxLayout()
+        
+        # Configuration editor
+        config_group = QGroupBox("Training Configuration")
+        config_layout = QFormLayout()
+        
+        self.config_controls = {
+            'learning_rate': QDoubleSpinBox(),
+            'batch_size': QSpinBox(),
+            'gamma': QDoubleSpinBox(),
+            'use_layer_norm': QCheckBox()
+        }
+        
+        # Setup spinboxes
+        self.config_controls['learning_rate'].setRange(1e-5, 1e-2)
+        self.config_controls['batch_size'].setRange(32, 2048)
+        self.config_controls['gamma'].setRange(0.8, 0.999)
+        
+        for name, control in self.config_controls.items():
+            config_layout.addRow(name.replace('_', ' ').title() + ":", control)
+        
+        config_group.setLayout(config_layout)
+        layout.addWidget(config_group)
+        
+        # Config buttons
+        btn_save = QPushButton("Save Config")
+        btn_load = QPushButton("Load Config")
+        btn_layout = QHBoxLayout()
+        btn_layout.addWidget(btn_save)
+        btn_layout.addWidget(btn_load)
+        layout.addLayout(btn_layout)
+        
+        tab.setLayout(layout)
+        return tab
+
+    def create_visualization_tab(self):
+        """Create the visualization tab"""
+        tab = QWidget()
+        layout = QVBoxLayout()
+        
+        # Matplotlib figure
+        self.figure = Figure()
+        self.canvas = FigureCanvas(self.figure)
+        self.ax = self.figure.add_subplot(111)
+        layout.addWidget(self.canvas)
+        
+        # Visualization controls
+        self.vis_selector = QComboBox()
+        self.vis_selector.addItems(["Policy Network", "Value Function", "Activation Patterns"])
+        layout.addWidget(self.vis_selector)
+        
+        return tab
+
+    def create_model_control_group(self):
+        """Create model management controls"""
+        group = QGroupBox("Model Management")
+        layout = QHBoxLayout()
+        
+        self.model_selector = QComboBox()
+        self.btn_load_model = QPushButton("Load Model")
+        self.btn_save_model = QPushButton("Save Model")
+        
+        layout.addWidget(self.model_selector)
+        layout.addWidget(self.btn_load_model)
+        layout.addWidget(self.btn_save_model)
+        group.setLayout(layout)
+        return group
+
+    def load_config_values(self):
+        """Load current config values into UI controls"""
+        for name, control in self.config_controls.items():
+            value = config.get(f'training.{name}', None)
+            if value is not None:
+                if isinstance(control, QDoubleSpinBox):
+                    control.setValue(float(value))
+                elif isinstance(control, QSpinBox):
+                    control.setValue(int(value))
+                elif isinstance(control, QCheckBox):
+                    control.setChecked(bool(value))
+
+    def update_realtime_data(self):
+        """Update real-time metrics from training"""
+        # TODO: Connect to actual training metrics
+        self.metric_labels['reward'].setText(f"{np.random.random()*100:.2f}")
+        self.metric_labels['episode_length'].setText(str(np.random.randint(50, 200)))
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = RLGymGUI()
+    window.show()
+    sys.exit(app.exec_())
