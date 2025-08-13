@@ -1,6 +1,7 @@
 import os
 import yaml
 from typing import Dict, Any
+from pydantic import ValidationError
 
 
 class Config:
@@ -64,12 +65,18 @@ class Config:
                 # Merge with defaults
                 default_config.update(user_config)
         
-        return default_config
+        try:
+            return validate_config(default_config)
+        except ValidationError as e:
+            raise RuntimeError(f"Invalid configuration: {e}") from e
     
     def save_config(self, config: Dict[str, Any] = None):
         """Save configuration to YAML file"""
         if config is not None:
-            self.config = config
+            try:
+                self.config = validate_config(config)
+            except ValidationError as e:
+                raise RuntimeError(f"Invalid configuration during save: {e}") from e
             
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
         with open(self.config_path, 'w') as f:
