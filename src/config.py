@@ -1,7 +1,30 @@
 import os
 import yaml
 from typing import Dict, Any
-from pydantic import ValidationError
+from pydantic import ValidationError, BaseModel, PositiveInt, confloat
+
+class ActionConfig(BaseModel):
+    action_type: str
+    n_bins: PositiveInt = 5
+    clip_range: confloat(ge=0.1, le=2.0) = 1.0
+
+class NetworkConfig(BaseModel):
+    hidden_size: PositiveInt = 256
+    dropout_rate: confloat(ge=0.0, le=0.5) = 0.1
+    use_layer_norm: bool = True
+
+class TrainingConfig(BaseModel):
+    learning_rate: confloat(ge=1e-5, le=1e-2) = 3e-4
+    gamma: confloat(ge=0.8, le=0.999) = 0.99
+    batch_size: PositiveInt = 128
+
+def validate_config(config: Dict[str, Any]) -> Dict[str, Any]:
+    validated = {
+        'action': ActionConfig(**config.get('action', {})).dict(),
+        'network': NetworkConfig(**config.get('network', {})).dict(),
+        'training': TrainingConfig(**config.get('training', {})).dict()
+    }
+    return validated
 
 
 class Config:
