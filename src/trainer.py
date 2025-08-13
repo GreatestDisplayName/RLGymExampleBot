@@ -136,10 +136,10 @@ class RLGymTrainer:
         
         policy_kwargs = dict(
             net_arch=[dict(
-                pi=config.get("model.policy_layers", [512, 512, 256]), 
-                vf=config.get("model.value_layers", [512, 512, 256])
+                pi=self.config.get("model.policy_layers", [512, 512, 256]), 
+                vf=self.config.get("model.value_layers", [512, 512, 256])
             )],
-            activation_fn=getattr(torch.nn, config.get("model.activation", "ReLU")),
+            activation_fn=getattr(torch.nn, self.config.get("model.activation", "ReLU")),
         )
         
         if load_path and os.path.exists(load_path):
@@ -172,7 +172,7 @@ class RLGymTrainer:
                 tensorboard_log=self.tensorboard_dir,
                 policy_kwargs=policy_kwargs,
                 verbose=1,
-                seed=config.get("training.seed"),
+                seed=self.config.get("training.seed"),
                 device=self.device,
             )
         
@@ -207,7 +207,7 @@ class RLGymTrainer:
                 eval_freq=self.eval_freq // self.n_envs,
                 deterministic=True,
                 render=False,
-                n_eval_episodes=config.get("evaluation.n_eval_episodes", 10),
+                n_eval_episodes=self.config.get("evaluation.n_eval_episodes", 10),
             )
             callbacks.append(eval_callback)
         
@@ -281,7 +281,7 @@ class RLGymTrainer:
         """Evaluate a trained model"""
         
         if n_episodes is None:
-            n_episodes = config.get("evaluation.n_eval_episodes", 10)
+            n_episodes = self.config.get("evaluation.n_eval_episodes", 10)
         
         if model_path:
             self.load_model(model_path)
