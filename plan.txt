@@ -42,4 +42,56 @@ RLGym GUI Future Improvement Plan
 
 All previously planned phases for improving the RLGym GUI have been completed, and five significant "Future Ideas" have been successfully implemented.
 
-Please review this updated roadmap and let me know which of the remaining ideas you would like to prioritize for the next development cycle. Your feedback is crucial in shaping the future of the RLGym GUI.
+Please review this updated roadmap and let me know which of the remaining ideas you would like to prioritize for the next development cycle. Your feedback is crucial in shaping the future of the RLGym GUI.RLGym Bot Development Plan - 2025
+
+1. Core Systems
+----------------
+- [ ] Implement unified action space interface (combine continuous/discrete)
+- [ ] Standardize observation space across advanced/default obs builders
+- [ ] Create configuration system for agent hyperparameters
+- [ ] Add serialization for agent models and configurations
+
+2. Training Infrastructure
+--------------------------
+- [ ] Setup distributed training environment
+- [ ] Implement experience replay buffer
+- [ ] Add reward function framework
+- [ ] Create training progress monitoring
+
+3. Performance Improvements
+---------------------------
+- [ ] Optimize observation space calculations
+- [ ] Vectorize action parsing
+- [ ] Benchmark memory usage
+- [ ] Profile network inference times
+
+4. Testing & Evaluation
+-----------------------
+- [ ] Unit tests for action spaces
+- [ ] Integration tests with RLGym
+- [ ] Create benchmark scenarios
+- [ ] Automated bot vs bot evaluation
+
+5. Deployment
+-------------
+- [ ] Package installer for bot
+- [ ] Configuration wizard
+- [ ] Training visualization GUI
+- [ ] Documentation website
+
+Roadmap:
+v0.1 - Basic functioning bot (P0)
+v0.2 - Training infrastructure (P1) 
+v0.3 - Performance optimizations (P1)
+v0.4 - Evaluation suite (P2)
+v0.5 - Deployment packaging (P2)
+
+Priorities:
+P0 - Critical path for MVP
+P1 - Important enhancements
+P2 - Nice-to-have features
+
+Next Steps:
+1. Finalize action space interface design
+2. Create basic reward functions
+3. Setup initial training pipeline
