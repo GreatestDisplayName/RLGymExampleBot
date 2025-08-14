@@ -8,4 +8,5 @@ ttkthemes
 jsonschema
 optuna
 pydantic>=1.10.7
-PyQt5==5.15.9
+PyQt5==5.15.4
+PyQt5-sip==12.9.0
