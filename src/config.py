@@ -4,7 +4,7 @@ from typing import Dict, Any
 from pydantic.v1 import ValidationError, BaseModel, PositiveInt, confloat
 
 class ActionConfig(BaseModel):
-    action_type: str
+    action_type: str = "discrete"
     n_bins: PositiveInt = 5
     clip_range: confloat(ge=0.1, le=2.0) = 1.0
 
