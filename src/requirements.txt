@@ -7,3 +7,4 @@ matplotlib
 ttkthemes
 jsonschema
 optuna
+pydantic>=1.10.7
