@@ -46,7 +46,6 @@ class Config:
                 "batch_size": 2048,
                 "n_epochs": 10,
                 "learning_rate": 3e-4,
-                "save_freq": 100_000,
                 "eval_freq": 50_000,
             },
             "model": {
