@@ -1,7 +1,7 @@
 import os
 import yaml
 from typing import Dict, Any
-from pydantic import ValidationError, BaseModel, PositiveInt, confloat
+from pydantic.v1 import ValidationError, BaseModel, PositiveInt, confloat
 
 class ActionConfig(BaseModel):
     action_type: str
