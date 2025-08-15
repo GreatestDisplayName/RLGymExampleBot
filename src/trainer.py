@@ -155,7 +155,7 @@ class RLGymTrainer:
             self.model = PPO(
                 "MlpPolicy",
                 self.env,
-                learning_rate=self.learning_rate,
+                learning_rate=self.learning_rate * (1 - 0.9*self.config.get("model.use_lr_schedule", True)),  # Config-controlled LR decay
                 n_steps=self.batch_size // self.n_envs,
                 batch_size=self.batch_size // 4,
                 n_epochs=self.n_epochs,

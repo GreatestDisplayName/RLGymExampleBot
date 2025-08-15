@@ -13,6 +13,8 @@ model:
   value_layers: [512, 512, 256]
   activation: "relu"
   dropout: 0.1
+  use_layer_norm: true
+  use_lr_schedule: true
 
 environment:
   max_steps: 300

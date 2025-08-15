@@ -40,7 +40,8 @@ class Agent:
     RLGym agent that uses a neural network to predict actions.
     """
     def __init__(self, input_size: int = 107, hidden_size: int = 256,
-                 output_size: int = 8, model_path: Optional[str] = None):
+                 output_size: int = 8, model_path: Optional[str] = None,
+                 dropout_rate: float = 0.1, use_layer_norm: bool = True):
         """
         Initializes the agent.
         
@@ -57,7 +58,13 @@ class Agent:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"Using device: {self.device}")
         
-        self.actor = NeuralNetwork(self.input_size, self.hidden_size, self.output_size).to(self.device)
+        self.actor = NeuralNetwork(
+            self.input_size,
+            self.hidden_size,
+            self.output_size,
+            dropout_rate=dropout_rate,
+            use_layer_norm=use_layer_norm
+        ).to(self.device)
         
         # Load pre-trained model if provided
         if model_path and os.path.exists(model_path):
