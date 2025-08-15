@@ -15,12 +15,18 @@ model:
   dropout: 0.1
 
 environment:
-  timeout: 300
-  team_size: 1
+  max_steps: 300
+  difficulty: 1
   spawn_opponents: true
   obs_builder: "AdvancedObs"
   action_parser: "DiscreteAction"
   reward_function: "CombinedReward"
+  gravity: -9.8
+  ball_drag: 0.03
+  car_drag: 0.03
+  boost_force: 20.0
+  jump_force: 5.0
+  flip_force: 7.0
 
 paths:
   log_dir: "logs"
