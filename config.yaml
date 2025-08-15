@@ -19,7 +19,7 @@ model:
 environment:
   max_steps: 300
   difficulty: 1
-  spawn_opponents: true
+  spawn_opponents: false  # Faster training without opponents
   obs_builder: "AdvancedObs"
   action_parser: "DiscreteAction"
   reward_function: "CombinedReward"

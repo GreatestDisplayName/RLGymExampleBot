@@ -39,9 +39,9 @@ class Agent:
     """
     RLGym agent that uses a neural network to predict actions.
     """
-    def __init__(self, input_size: int = 107, hidden_size: int = 256,
+    def __init__(self, input_size: int = 107, hidden_size: int = 128,
                  output_size: int = 8, model_path: Optional[str] = None,
-                 dropout_rate: float = 0.1, use_layer_norm: bool = True):
+                 dropout_rate: float = 0.05, use_layer_norm: bool = False):
         """
         Initializes the agent.
         

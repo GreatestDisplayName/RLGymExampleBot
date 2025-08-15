@@ -155,13 +155,14 @@ class RLGymTrainer:
             self.model = PPO(
                 "MlpPolicy",
                 self.env,
-                learning_rate=self.learning_rate * (1 - 0.9*self.config.get("model.use_lr_schedule", True)),  # Config-controlled LR decay
-                n_steps=self.batch_size // self.n_envs,
-                batch_size=self.batch_size // 4,
-                n_epochs=self.n_epochs,
-                gamma=0.99,
-                gae_lambda=0.95,
-                clip_range=0.2,
+                learning_rate=self.learning_rate * 2,  # Higher initial LR with decay
+                n_steps=512,  # Larger n_steps for better advantage estimation
+                batch_size=1024,  # Larger batches for GPU efficiency
+                n_epochs=4,  # Fewer epochs for faster updates
+                gamma=0.995,  # Slightly higher gamma for longer horizon
+                gae_lambda=0.98,  # Adjusted for new gamma
+                clip_range=0.15,  # Tighter clipping for stability
+                use_sde=True,  # State-dependent exploration
                 clip_range_vf=None,
                 ent_coef=0.01,
                 vf_coef=0.5,
