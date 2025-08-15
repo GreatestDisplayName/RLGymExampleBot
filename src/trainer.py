@@ -167,7 +167,6 @@ class RLGymTrainer:
                 ent_coef=0.01,
                 vf_coef=0.5,
                 max_grad_norm=0.5,
-                use_sde=False,
                 sde_sample_freq=-1,
                 target_kl=None,
                 tensorboard_log=self.tensorboard_dir,
