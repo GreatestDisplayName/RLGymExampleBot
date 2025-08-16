@@ -435,35 +435,6 @@ class CombinedRLGymGUI:
         )
         self.optimization_thread.start()
 
-    def _run_optimization_task(self, agent_type: str, n_trials: int, study_name: Optional[str]):
-        from src.hyperparameter_optimization import HyperparameterOptimizer
-        try:
-            optimizer = HyperparameterOptimizer(
-                agent_type=agent_type,
-                n_trials=n_trials,
-                study_name=study_name
-            )
-            best_trial = optimizer.optimize()
-
-            results_summary = f"Optimization completed for {agent_type}!\n"
-            results_summary += f"Best trial number: {best_trial.number}\n"
-            results_summary += f"Best mean reward: {best_trial.value:.2f}\n"
-            results_summary += "Best parameters:\n"
-            for param, value in best_trial.params.items():
-                results_summary += f"  {param}: {value}\n"
-
-            self.master.after(0, lambda: self._update_optimization_results(results_summary))
-            self.master.after(0, lambda: self._set_status("Hyperparameter optimization completed."))
-            self.master.after(0, lambda: self._log_activity("Hyperparameter optimization completed successfully."))
-
-        except Exception as e:
-            error_message = f"Hyperparameter optimization failed: {e}"
-            logger.exception(error_message)
-            self.master.after(0, lambda: self._update_optimization_results(f"Error: {error_message}\nCheck logs for details."))
-            self.master.after(0, lambda: self._set_status("Hyperparameter optimization failed."))
-            self.master.after(0, lambda: self._log_activity(f"Hyperparameter optimization failed: {e}"))
-        finally:
-            self.master.after(0, lambda: self.start_opt_button.config(state="normal"))
 
     def _update_optimization_results(self, text: str):
         self.opt_results_text.config(state="normal")
