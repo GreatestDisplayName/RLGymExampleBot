@@ -1,0 +1,11 @@
+{
+  "agent_type": "PPO",
+  "total_timesteps": 10000,
+  "training_time_seconds": 27.069711685180664,
+  "final_model_path": "models/PPO/final_model",
+  "config": {
+    "learning_rate": 0.0003,
+    "batch_size": 64,
+    "n_environments": 4
+  }
+}

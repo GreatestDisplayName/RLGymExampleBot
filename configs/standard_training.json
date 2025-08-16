@@ -1,0 +1,8 @@
+{
+  "description": "Standard training run",
+  "agent_type": "PPO",
+  "timesteps": 1000000,
+  "save_freq": 10000,
+  "n_envs": 4,
+  "eval_freq": 10000
+}

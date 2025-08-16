@@ -1,0 +1,3 @@
+@echo off
+echo Starting MkDocs development server...
+mkdocs serve

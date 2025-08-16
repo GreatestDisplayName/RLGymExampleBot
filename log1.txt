@@ -1,0 +1,3 @@
+2025-08-15 08:53:32,607 - INFO - Combined RLGym GUI initialized.
+2025-08-15 08:53:32,691 - INFO - Theme changed to black
+

@@ -1,0 +1,8 @@
+{
+  "description": "Extended training for better performance",
+  "agent_type": "PPO",
+  "timesteps": 5000000,
+  "save_freq": 50000,
+  "n_envs": 8,
+  "eval_freq": 50000
+}

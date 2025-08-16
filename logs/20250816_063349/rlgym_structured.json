@@ -1,0 +1,7 @@
+{"timestamp": "2025-08-16T11:33:49.767110", "level": "INFO", "logger": "RLGym", "message": "Starting Agent vs. Agent Simulation", "module": "logger", "function": "info", "line": 137}
+{"timestamp": "2025-08-16T11:33:49.767110", "level": "INFO", "logger": "RLGym", "message": "Starting Agent vs. Agent Simulation for 1 episodes.", "module": "logger", "function": "info", "line": 137}
+{"timestamp": "2025-08-16T11:33:49.767110", "level": "INFO", "logger": "RLGym", "message": "Agent A: models/PPO/PPO/final_model.zip (PPO)", "module": "logger", "function": "info", "line": 137}
+{"timestamp": "2025-08-16T11:33:49.767110", "level": "INFO", "logger": "RLGym", "message": "Agent B: models/PPO/PPO/final_model.zip (PPO)", "module": "logger", "function": "info", "line": 137}
+{"timestamp": "2025-08-16T11:33:49.768107", "level": "INFO", "logger": "RLGym", "message": "Turn length: 50 steps", "module": "logger", "function": "info", "line": 137}
+{"timestamp": "2025-08-16T11:33:49.769111", "level": "INFO", "logger": "RLGym", "message": "SimpleRocketLeagueEnv initialized with 1000 max steps, difficulty: medium", "module": "logger", "function": "info", "line": 137}
+{"timestamp": "2025-08-16T11:33:49.801130", "level": "ERROR", "logger": "RLGym", "message": "Agent vs. Agent Simulation failed after 0.03s", "module": "logger", "function": "error", "line": 145}

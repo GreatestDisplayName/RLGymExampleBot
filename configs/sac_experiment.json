@@ -1,0 +1,8 @@
+{
+  "description": "SAC algorithm experiment",
+  "agent_type": "SAC",
+  "timesteps": 1000000,
+  "save_freq": 10000,
+  "n_envs": 4,
+  "eval_freq": 10000
+}

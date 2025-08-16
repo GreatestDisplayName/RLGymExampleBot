@@ -1,0 +1,24 @@
+{
+  "environment_loaded": true,
+  "training_completed": true,
+  "model_path": "models/PPO/final_model",
+  "model_converted": true,
+  "converted_path": "models\\PPO\\PPO_converted.pth",
+  "bot_updated": true,
+  "model_loaded": true,
+  "play_testing": true,
+  "play_results": {
+    "episodes": 5,
+    "total_reward": 250.0,
+    "avg_reward": 50.0,
+    "best_reward": 50.0,
+    "worst_reward": 50.0,
+    "episode_rewards": [
+      50.0,
+      50.0,
+      50.0,
+      50.0,
+      50.0
+    ]
+  }
+}

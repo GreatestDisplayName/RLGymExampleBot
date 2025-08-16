@@ -1,0 +1,27 @@
+site_name: RLGymExampleBot Wiki
+site_url: https://your-project-url.github.io/
+repo_url: https://github.com/your-repo/RLGymExampleBot
+repo_name: RLGymExampleBot
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+
+nav:
+  - Home: 'docs/wiki/Home.md'
+  - Introduction: 'docs/wiki/Introduction.md'
+  - Setup Guide: 'docs/wiki/Setup.md'
+  - Training Guide: 'docs/wiki/Training.md'
+  - Deployment Guide: 'docs/wiki/Deployment.md'
+  - Troubleshooting: 'docs/wiki/Troubleshooting.md'
+
+plugins:
+  - search

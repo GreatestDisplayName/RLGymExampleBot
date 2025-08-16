@@ -1,0 +1,48 @@
+{
+  "players": {
+    "dsf": {
+      "name": "dsf",
+      "model_path": "league\\models\\dsf_v1.pth",
+      "agent_type": "PPO",
+      "rating": 1000.0,
+      "games_played": 0,
+      "wins": 0,
+      "losses": 0,
+      "draws": 0,
+      "last_updated": 1754905394.5906518,
+      "version": 2,
+      "total_training_steps": 10000,
+      "best_rating": 1000.0,
+      "win_streak": 0,
+      "loss_streak": 0
+    },
+    "ddd": {
+      "name": "ddd",
+      "model_path": "league\\models\\ddd_v1.pth",
+      "agent_type": "SAC",
+      "rating": 1000.0,
+      "games_played": 0,
+      "wins": 0,
+      "losses": 0,
+      "draws": 0,
+      "last_updated": 1754905420.550683,
+      "version": 2,
+      "total_training_steps": 100,
+      "best_rating": 1000.0,
+      "win_streak": 0,
+      "loss_streak": 0
+    }
+  },
+  "match_history": [],
+  "league_stats": {
+    "total_matches": 0,
+    "total_games": 0,
+    "league_created": 1754905362.1327174,
+    "last_tournament": null
+  },
+  "base_rating": 1000.0,
+  "k_factor": 32,
+  "min_games_for_rating": 5,
+  "rating_decay_factor": 0.95,
+  "last_saved": 1754905420.5622096
+}

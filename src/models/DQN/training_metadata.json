@@ -1,0 +1,11 @@
+{
+  "agent_type": "DQN",
+  "total_timesteps": 10000,
+  "training_time_seconds": 69.034996509552,
+  "final_model_path": "models/DQN/final_model",
+  "config": {
+    "learning_rate": 0.0003,
+    "batch_size": 2048,
+    "n_environments": 4
+  }
+}

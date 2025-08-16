@@ -190,7 +190,14 @@ class CombinedRLGymGUI:
         # Create and setup all tabs using new modular classes
         self.dashboard_tab = DashboardTab(self.notebook, self.main_pane, self)
         self.config_tab = ConfigTab(self.notebook, self.main_pane, self)
-        self.training_tab = TrainingTab(self.notebook, self.main_pane, self, self.launcher, self.thread_pool, self.training_episodes, self.training_avg_rewards, self.training_losses, self.realtime_metrics)
+        
+        # Initialize training tab with required parameters
+        self.training_tab = TrainingTab(
+            notebook=self.notebook, 
+            parent_frame=self.main_pane, 
+            main_app_instance=self
+        )
+        
         self.visualization_tab = VisualizationTab(self.notebook, self.main_pane, self)
         self.league_tab = LeagueTab(self.notebook, self.main_pane, self, self.league_manager, self.thread_pool)
         self.model_management_tab = ModelManagementTab(self.notebook, self.main_pane, self)
@@ -210,10 +217,29 @@ class CombinedRLGymGUI:
         self.notebook.add(self.help_tab.frame, text="❓ Help")
 
         # Initial population for some elements that depend on main_app methods
-        self.dashboard_tab.populate_model_selector(sorted(list(self.launcher.default_configs.keys()) + [f.stem for f in self.launcher.config_dir.glob("*.json") if f.stem not in self.launcher.default_configs.keys()]))
-        self.training_tab._populate_training_config_combobox() # Call internal method to populate its list
-        self.league_tab._update_leaderboard_view() # Call internal method to populate its list
-        self.model_management_tab._populate_model_list() # Call internal method to populate its list
+        if hasattr(self.dashboard_tab, 'populate_model_selector'):
+            try:
+                self.dashboard_tab.populate_model_selector(
+                    sorted(list(self.launcher.default_configs.keys()) + 
+                          [f.stem for f in self.launcher.config_dir.glob("*.json") 
+                           if f.stem not in self.launcher.default_configs.keys()])
+                )
+            except Exception as e:
+                print(f"Error populating dashboard: {e}")
+                
+        # Initialize tabs with their data
+        if hasattr(self.training_tab, '_populate_training_config_combobox'):
+            self.training_tab._populate_training_config_combobox()
+            
+        if hasattr(self.league_tab, '_update_leaderboard_view'):
+            self.league_tab._update_leaderboard_view()
+            
+        if hasattr(self.model_management_tab, '_populate_model_list'):
+            self.model_management_tab._populate_model_list()
+        
+        # Safely populate config list if config_tab is available
+        if hasattr(self, 'config_tab') and hasattr(self, '_populate_config_list'):
+            self.after(100, self._populate_config_list)  # Small delay to ensure UI is ready
 
         self._setup_global_log_view()
         self._setup_logging()
@@ -325,10 +351,140 @@ class CombinedRLGymGUI:
         self.dashboard_tab._log_activity(message)
     
 
-    
+    # ========================= Config Tab Helpers =========================
+    def _populate_config_list(self):
+        """Populate the ConfigTab treeview with available config files."""
+        tree = self.config_tab.config_list
+        tree.delete(*tree.get_children())
 
-    
+        default_configs = list(self.launcher.default_configs.keys())
+        custom_configs = [f.stem for f in self.launcher.config_dir.glob("*.json") if f.stem not in default_configs]
+        self._all_config_names = sorted(default_configs + custom_configs)
 
+        for cfg in self._all_config_names:
+            tree.insert("", "end", values=(cfg,))
+
+        # Reset any active filter
+        if hasattr(self.config_tab, "config_search_var"):
+            self.config_tab.config_search_var.set("")
+
+        logger.info("Configuration list populated.")
+
+    def _filter_config_list(self, *args):
+        """Filter configuration list based on search query."""
+        query = self.config_tab.config_search_var.get().lower()
+        names = getattr(self, "_all_config_names", [])
+        filtered = [n for n in names if query in n.lower()]
+
+        tree = self.config_tab.config_list
+        tree.delete(*tree.get_children())
+        for cfg in filtered:
+            tree.insert("", "end", values=(cfg,))
+
+    def _on_config_select(self, event):
+        """Display selected configuration's JSON contents."""
+        selection = self.config_tab.config_list.selection()
+        if not selection:
+            return
+        config_name = self.config_tab.config_list.item(selection[0], "values")[0]
+        self._selected_config_name = config_name
+        try:
+            cfg = self.launcher.load_config(config_name)
+            widget = self.config_tab.config_details_text
+            widget.config(state="normal")
+            widget.delete("1.0", tk.END)
+            widget.insert(tk.END, json.dumps(cfg, indent=2))
+            widget.config(state="disabled")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load config '{config_name}': {e}")
+            logger.error(f"Failed to load config {config_name}: {e}")
+
+    def _save_config(self):
+        """Save current JSON text to selected configuration file."""
+        if not hasattr(self, "_selected_config_name"):
+            messagebox.showwarning("Warning", "No configuration selected.")
+            return
+        text = self.config_tab.config_details_text.get("1.0", tk.END)
+        try:
+            cfg = json.loads(text)
+        except json.JSONDecodeError as e:
+            messagebox.showerror("Error", f"Invalid JSON: {e}")
+            return
+
+        path = self.launcher.config_dir / f"{self._selected_config_name}.json"
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(cfg, f, indent=2)
+            logger.info(f"Saved configuration: {path.name}")
+            messagebox.showinfo("Success", f"Configuration '{self._selected_config_name}' saved.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save config: {e}")
+            logger.error(f"Failed to save config {path}: {e}")
+
+    def _save_config_as(self):
+        """Save current JSON text to a new file chosen by the user."""
+        text = self.config_tab.config_details_text.get("1.0", tk.END)
+        try:
+            cfg = json.loads(text)
+        except json.JSONDecodeError as e:
+            messagebox.showerror("Error", f"Invalid JSON: {e}")
+            return
+        filename = filedialog.asksaveasfilename(
+            title="Save Configuration As",
+            defaultextension=".json",
+            initialdir=str(self.launcher.config_dir),
+            filetypes=[("JSON files", "*.json")]
+        )
+        if not filename:
+            return
+        try:
+            with open(filename, "w", encoding="utf-8") as f:
+                json.dump(cfg, f, indent=2)
+            logger.info(f"Configuration saved as: {Path(filename).name}")
+            self._populate_config_list()
+            messagebox.showinfo("Success", f"Configuration saved to '{filename}'.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save config: {e}")
+            logger.error(f"Failed to save config {filename}: {e}")
+
+    def _create_new_config_dialog(self):
+        """Open a dialog for creating a new configuration file."""
+        dialog = tk.Toplevel(self.master)
+        dialog.title("Create New Configuration")
+        dialog.geometry("400x300")
+
+        ttk.Label(dialog, text="Config Name:").pack(pady=5)
+        name_entry = ttk.Entry(dialog)
+        name_entry.pack(pady=5)
+
+        ttk.Label(dialog, text=f"Agent Type ({', '.join(SUPPORTED_AGENT_TYPES)}):").pack(pady=5)
+        agent_type_entry = ttk.Entry(dialog)
+        agent_type_entry.pack(pady=5)
+
+        ttk.Label(dialog, text="Timesteps:").pack(pady=5)
+        timesteps_entry = ttk.Entry(dialog)
+        timesteps_entry.pack(pady=5)
+
+        def save():
+            config_name = name_entry.get().strip()
+            agent_type = agent_type_entry.get().strip()
+            timesteps_str = timesteps_entry.get().strip()
+            if not config_name or not agent_type or not timesteps_str:
+                messagebox.showerror("Error", "All fields are required.")
+                return
+            try:
+                timesteps_int = int(timesteps_str)
+                self.launcher.create_config(name=config_name, agent_type=agent_type, timesteps=timesteps_int)
+                dialog.destroy()
+                self._populate_config_list()
+                messagebox.showinfo("Success", f"Config '{config_name}' created.")
+            except ValueError:
+                messagebox.showerror("Error", "Timesteps must be an integer.")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to create config: {e}")
+                logger.error(f"Failed to create config {config_name}: {e}")
+
+        ttk.Button(dialog, text="Save", command=save).pack(pady=10)
     
 
     

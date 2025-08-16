@@ -1,0 +1,8 @@
+{
+  "description": "Quick test run for debugging",
+  "agent_type": "PPO",
+  "timesteps": 10000,
+  "save_freq": 1000,
+  "n_envs": 2,
+  "eval_freq": 2000
+}

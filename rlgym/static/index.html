@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <title>RLGym</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/chart.js@4"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+</head>
+<body>
+<div id="app">
+  <nav class="container-fluid"><h1>RLGym</h1></nav>
+  <main class="container">
+    <form @submit.prevent="createRun">
+      <label>Environment<select v-model="env">
+        <option value="CartPole-v1">CartPole</option>
+        <option value="LunarLander-v2">LunarLander</option></select></label>
+      <label>Algorithm<select v-model="algo">
+        <option>PPO</option><option>DQN</option><option>Random</option></select></label>
+      <label>Epochs<input type="number" v-model.number="max" /></label>
+      <button>Start Training</button>
+    </form>
+    <canvas id="chart" width="600" height="200"></canvas>
+    <p v-if="runId">Waiting run {{runId}}...</p>
+  </main>
+</div>
+<script src="/static/rlgym.js"></script>
+</body>
+</html>

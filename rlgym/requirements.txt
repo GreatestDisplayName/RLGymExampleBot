@@ -1,0 +1,8 @@
+fastapi==0.110
+uvicorn[standard]==0.29
+ray[rllib]==2.22
+gymnasium[box2d]==0.29
+torch==2.2
+jinja2
+redis
+websockets

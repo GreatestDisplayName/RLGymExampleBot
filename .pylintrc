@@ -1,2 +1,118 @@
+[MASTER]
+# Use multiple processes to speed up Pylint
+jobs=0
+
+[MESSAGES CONTROL]
+# Disable specific warnings that are not relevant for this project
+disable=C0111,  # missing-docstring
+        C0103,  # invalid-name
+        C0303,  # trailing-whitespace
+        W0621,  # redefined-outer-name
+        W0611,  # unused-import
+        W0612,  # unused-variable
+        R0903,  # too-few-public-methods
+        R0913,  # too-many-arguments
+        R0914,  # too-many-locals
+        R0915,  # too-many-statements
+
+[REPORTS]
+# Set the output format
+output-format=text
+
+# Include a brief explanation of each error
+msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
+
+# Include statistics
+reports=yes
+
+[FORMAT]
+# Maximum number of characters on a single line
+max-line-length=120
+
+# Maximum number of lines in a module
+max-module-lines=1000
+
+# String used as indentation unit
+indent-string='    '
+
+[BASIC]
+# Regular expression which should only match function or class names
+good-names=i,j,k,ex,Run,_,id,db
+
+# Regular expression which should only match correct variable names
+good-rgx=[a-z_][a-z0-9_]{2,30}$
+
+# Regular expression which should only match correct function names
+good-fn-rgx=[a-z_][a-z0-9_]{2,30}$
+
+# Regular expression which should only match correct class names
+good-cls-rgx=[A-Z_][a-zA-Z0-9_]+$
+
+[SIMILARITIES]
+# Minimum lines number of a similarity
+min-similarity-lines=4
+
+# Ignore imports when computing similarities
+ignore-imports=yes
+
+[MISCELLANEOUS]
+# List of note tags to take into consideration
+notes=
+
 [TYPECHECK]
-generated-members=QuickChats.*
+# List of module names for which member attributes should not be checked
+ignored-modules=numpy,torch,stable_baselines3,rlgym
+generated-members=QuickChats.*,REQUEST,acl_users,aq_parent,"[a-zA-Z]+_set{1,2}",save,delete
+
+[VARIABLES]
+# List of additional names to consider as builtins
+additional-builtins=
+
+[CLASSES]
+# List of method names used to declare (i.e. assign) a class attribute
+defining-attr-methods=__init__,__new__,setUp
+
+# List of valid names for the first argument in a class method
+valid-classmethod-first-arg=cls
+
+# List of valid names for the first argument in a metaclass class method
+valid-metaclass-first-arg=mcs
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=10
+
+# Maximum number of locals for function / method
+max-locals=15
+
+# Maximum number of return statements for function / method
+max-returns=6
+
+# Maximum number of statements in function / method
+max-statements=50
+
+# Maximum number of parents for a class
+max-parents=7
+
+# Maximum number of attributes for a class
+max-attributes=7
+
+# Minimum number of public methods for a class
+min-public-methods=2
+
+# Maximum number of public methods for a class
+max-public-methods=20
+
+[IMPORTS]
+# Deprecated modules which should not be used
+deprecated-modules=regsub,TERMIOS,Bastion,rexec
+
+# Create a graph of external dependencies in the given file
+ext-import-graph=
+
+# Create a graph of every (internal) module in the given file
+int-import-graph=
+
+[EXCEPTIONS]
+# Exceptions that will emit a warning when caught
+overgeneral-exceptions=Exception

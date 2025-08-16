@@ -1,0 +1,12 @@
+{
+  "description": "Custom configuration: asf",
+  "agent_type": "DQN",
+  "timesteps": 10000,
+  "save_freq": 10000,
+  "n_envs": 4,
+  "eval_freq": 10000,
+  "learning_rate": 0.0003,
+  "batch_size": 64,
+  "hidden_size": 256,
+  "n_layers": 2
+}
