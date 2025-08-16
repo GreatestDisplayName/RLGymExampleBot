@@ -12,7 +12,7 @@ from .base_tab import BaseTab
 class DashboardTab(BaseTab):
     def __init__(self, notebook, parent_frame, main_app_instance):
         super().__init__(notebook, parent_frame, "🏠 Dashboard", main_app_instance)
-        self.main_app = main_app_instance # Reference to the main CombinedRLGymGUI instance
+        self.master_gui = main_app_instance # Reference to the main CombinedRLGymGUI instance
         self.realtime_metrics = {}
         self.activity_text = None # Will be set up in setup_ui
         self.theme_combobox = None # Will be set up in setup_ui
