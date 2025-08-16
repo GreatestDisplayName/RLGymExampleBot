@@ -211,7 +211,6 @@ class CombinedRLGymGUI:
 
         # Initial population for some elements that depend on main_app methods
         self.dashboard_tab.populate_model_selector(sorted(list(self.launcher.default_configs.keys()) + [f.stem for f in self.launcher.config_dir.glob("*.json") if f.stem not in self.launcher.default_configs.keys()]))
-        self.config_tab._populate_config_list() # Call internal method to populate its list
         self.training_tab._populate_training_config_combobox() # Call internal method to populate its list
         self.league_tab._update_leaderboard_view() # Call internal method to populate its list
         self.model_management_tab._populate_model_list() # Call internal method to populate its list
