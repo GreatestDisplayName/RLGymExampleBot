@@ -1,0 +1,29 @@
+            - name: Python Coverage
+  # You may pin to the exact commit or the version.
+  # uses: orgoro/coverage@4e3bc9302f715595336a40f7dd4a3b15c687bdb4
+  uses: orgoro/coverage@v3.1
+  with:
+    # local path to a covergae xml file like the output of pytest --cov
+    coverageFile: 
+    # github token
+    token: 
+    # the coverage threshold for average over all files [0,1]
+    thresholdAll: # optional, default is 0.0
+    # the coverage threshold for average over new files [0,1]
+    thresholdNew: # optional, default is 0.0
+    # the coverage threshold for average over new files [0,1]
+    thresholdModified: # optional, default is 0.0
+            - name: Create Issue From pytest log
+  # You may pin to the exact commit or the version.
+  # uses: scientific-python/issue-from-pytest-log-action@138db94bfe4b12ac11fc1aff307ee0835feab403
+  uses: scientific-python/issue-from-pytest-log-action@v1.2.8
+  with:
+    # The path to the log file
+    log-path: 
+    # Title of issue being created or updated
+    issue-title: # optional, default is ⚠️ Nightly upstream-dev CI failed ⚠️
+    # Labels to apply to issue
+    issue-label: # optional, default is CI
+    # Comma-separated users to assign to the issue (no spaces). All assigned users have to have commit rights.
+    assignees: # optional, default is 
+          
